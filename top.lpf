@@ -1,3 +1,7 @@
 LOCATE COMP "clk" SITE "P6";
 IOBUF PORT "clk" IO_TYPE=LVCMOS33;
 FREQUENCY PORT "clk" 25 MHZ;
+
+A12 -> blue
+A11 -> green
+B11 -> red
