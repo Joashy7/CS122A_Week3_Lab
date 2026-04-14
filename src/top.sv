@@ -1,8 +1,8 @@
 module top (
     input logic clk,
-    input wire button1,
+    input reg button1,
     input wire button2,
-    output logic out
+    output reg out
 );
     typedef enum logic [3:0]{START, S0, S1, S2, S3} state_t;
 
@@ -11,10 +11,10 @@ module top (
     always @(posedge clk) begin
         case (state)
             START:state = S0;
-            S0:state = state_t'(but1 ? S1 : S0);
-            S1:state = state_t'(!but1 ? S1 : S2);
-            S2:state = state_t'(but1 ? S3 : S2);
-            S3:state = state_t'(!but1 ? S3 : S0);
+            S0:state = state_t'(button1 ? S1 : S0);
+            S1:state = state_t'(!button1 ? S1 : S2);
+            S2:state = state_t'(button1 ? S3 : S2);
+            S3:state = state_t'(!button1 ? S3 : S0);
             default: state = START;
         endcase
     end

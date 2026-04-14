@@ -11,20 +11,20 @@
  *     So for labs without sequential elements, you can remove them.
  */
 
-module top_tb;
+module top_tb();
 
 /** declare tb signals below */
 logic clk_tb;
-wire but1;
-wire but2;
-logic out;
+reg button1;
+wire button2;
+reg out;
 
 /** declare module(s) below */
 top dut (                  // declare an inst of top called "dut" (device under test)
     /** hook up tb signals to dut signals */
-    .clk(clk_tb)           // connect dut's clk wire to clk_tb
-    .button1(but1)
-    .button2(but2)
+    .clk(clk_tb),           // connect dut's clk wire to clk_tb
+    .button1(button1),
+    .button2(button2)
 );
 
 localparam CLK_PERIOD = 2 /** clk period */;
@@ -46,33 +46,41 @@ endtask
 
 task testPress(); begin
     clk_tb<=1'b1;       // sets clk_tb to 1
-    but1 = 1;
+    @(negedge clk_tb);
+    button1 <= 1;
     checkLED();
     #5; 
-    but1 = 0;
+    @(negedge clk_tb);
+    button1 <= 0;
     checkLED();
 end
 endtask
 
 task testPressTwice(); begin
     clk_tb<=1'b1;       // sets clk_tb to 1
-    but1 = 1;
+    @(negedge clk_tb);
+    button1 <= 1;
     checkLED();
     #5; 
-    but1 = 0;
+    @(negedge clk_tb);
+    button1 <= 0;
     checkLED();
     #5;
-    but1 = 1;
+    @(negedge clk_tb);
+    button1 <= 1;
     checkLED();
     #5; 
-    but1 = 0;
+    @(negedge clk_tb);
+    button1 <= 0;
     checkLED();
 end
 endtask
 
 initial begin
     /** testbench logic goes below */
+    @(negedge clk_tb);
     testPress();     
+    @(negedge clk_tb);
     testPressTwice();
     //#(CLK_PERIOD*100);    // waits for CLK_PERIOD * 100 ticks
     $finish;            // end simulation, otherwise it runs indefinitely
