@@ -4,13 +4,15 @@
 module top_tb;
 logic clk;
 logic button;
-wire led;
+wire [3:0]duty_cycle;
+wire [6:0] seg7;
 
 top UUT
 (
     .clk(clk),
     .button(button),
-    .led(led)
+    .duty_cycle(duty_cycle),
+    .seg7(seg7)
 );
 
 localparam CLK_PERIOD = 2 /** clk period */;
@@ -22,29 +24,15 @@ initial begin
 end
 
 initial begin
-
     clk <= 0;
 
-    button = 0;
-    #(CLK_PERIOD*3);
+    repeat (12) begin
+        button = 1;
+        #(CLK_PERIOD*3);
 
-    button = 1;
-    #(CLK_PERIOD*3);
-
-    button = 0;
-    #(CLK_PERIOD*3);
-
-    button = 1;
-    #(CLK_PERIOD*3);
-
-    button = 0;
-    #(CLK_PERIOD*3);
-
-    button = 1;
-    #(CLK_PERIOD*3);
-
-    button = 0;
-    #(CLK_PERIOD*3);
+        button = 0;
+        #(CLK_PERIOD*3);
+    end
 
     $finish;
 end
