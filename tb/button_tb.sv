@@ -15,16 +15,15 @@ module button_tb();
 
 /** declare tb signals below */
 logic clk_tb;
-reg button1;
-reg button2;
+reg button;
 reg out;
 
 /** declare module(s) below */
 button dut (                  // declare an inst of top called "dut" (device under test)
     /** hook up tb signals to dut signals */
     .clk(clk_tb),           // connect dut's clk wire to clk_tb
-    .button1(button1),
-    .button2(button2)
+    .button(button),
+    .duty_cycle(out)
 );
 
 localparam CLK_PERIOD = 2 /** clk period */;
@@ -35,54 +34,18 @@ initial begin
     $dumpvars(0, button_tb);       // capture all signals under top_tb
 end
 
-task checkLED(); begin
-if (out) begin
-        $display("LED State: On");
-    end else begin
-        $display ("LED State: Off");
-    end
-end
-endtask
-
-task testPress(); begin
-    clk_tb<=1'b1;       // sets clk_tb to 1
-    //@(negedge clk_tb);
-    button1 <= 1;
-    checkLED();
-    #5; 
-    //@(negedge clk_tb);
-    button1 <= 0;
-    checkLED();
-end
-endtask
-
-task testPressTwice(); begin
-    clk_tb<=1'b1;       // sets clk_tb to 1
-    //@(negedge clk_tb);
-    button1 <= 1;
-    checkLED();
-    #5; 
-    //@(negedge clk_tb);
-    button1 <= 0;
-    checkLED();
-    #5;
-    //@(negedge clk_tb);
-    button1 <= 1;
-    checkLED();
-    #5; 
-    //@(negedge clk_tb);
-    button1 <= 0;
-    checkLED();
-end
-endtask
-
 initial begin
-    /** testbench logic goes below */
-    //@(negedge clk_tb);
-    testPress();     #5; 
-    //@(negedge clk_tb);
-    testPressTwice();#5; 
-    //#(CLK_PERIOD*100);    // waits for CLK_PERIOD * 100 ticks
+    clk_tb <= 0;
+
+    repeat (12) begin
+        button = 1;
+        $display(out);
+        #(CLK_PERIOD*10);
+
+        button = 0;
+        $display(out);
+        #(CLK_PERIOD*10);
+    end
     $finish;            // end simulation, otherwise it runs indefinitely
 end
 

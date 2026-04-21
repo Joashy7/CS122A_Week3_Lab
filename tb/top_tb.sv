@@ -13,8 +13,7 @@ top UUT
     .clk(clk),
     .button(button),
     .duty_cycle(duty_cycle),
-    .seg7(seg7),
-    .led(led)
+    .seg7(seg7)
 );
 
 localparam CLK_PERIOD = 2 /** clk period */;
