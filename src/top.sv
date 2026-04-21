@@ -11,7 +11,8 @@ module top (
     input wire switch,
     output logic [6:0] seg7,
     output logic led_blue,
-    output logic led_red
+    output logic led_red,
+    output logic dp
 );
 
 logic slowed_clk;
@@ -26,5 +27,7 @@ pwm pwm_blue (.clk(clk), .duty_cycle(duty_cycle_blue), .out(led_blue));
 pwm pwm_red (.clk(clk), .duty_cycle(duty_cycle_red), .out(led_red));
 switch display_switch (.switch(switch), .duty_cycle_blue(duty_cycle_blue), .duty_cycle_red(duty_cycle_red), .display_duty_cycle(displayed_duty_cycle));
 decoder decoder (.clk(clk), .bcd(displayed_duty_cycle), .seg7(seg7));
+
+assign dp = switch;
 
 endmodule
